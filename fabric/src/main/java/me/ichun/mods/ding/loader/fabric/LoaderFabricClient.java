@@ -1,22 +1,12 @@
 package me.ichun.mods.ding.loader.fabric;
 
 import me.ichun.mods.ding.common.Ding;
-import me.ichun.mods.ding.common.core.Config;
-import me.ichun.mods.ichunutil.common.iChunUtil;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
 
-public class LoaderFabricClient extends Ding
-    implements ClientModInitializer
-{
+public class LoaderFabricClient implements ClientModInitializer {
     @Override
-    public void onInitializeClient()
-    {
-        modProxy = this;
-
-        //register config
-        config = iChunUtil.d().registerConfig(new Config());
-
-        //init event handler
-        new EventHandlerClientFabric();
+    public void onInitializeClient() {
+        Ding.init(FabricLoader.getInstance().getConfigDir());
     }
 }
