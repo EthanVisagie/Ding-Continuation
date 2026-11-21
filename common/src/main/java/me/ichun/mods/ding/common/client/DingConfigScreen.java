@@ -186,10 +186,10 @@ public class DingConfigScreen extends Screen {
     @Override
     protected void init() {
         int centerX = this.width / 2;
-        int tabWidth = 104;
+        int tabWidth = 100;
         int tabGap = 6;
         int tabsStartX = centerX - (tabWidth * 3 + tabGap * 2) / 2;
-        int topY = 36;
+        int topY = 26;
 
         Tab[] tabs = Tab.values();
         for (int i = 0; i < tabs.length; i++) {
@@ -204,9 +204,12 @@ public class DingConfigScreen extends Screen {
         }
 
         int fieldWidth = 260;
+        int halfWidth = 127;
+        int halfGap = 6;
         int leftX = centerX - fieldWidth / 2;
-        int y = 70;
+        int rightX = leftX + halfWidth + halfGap;
 
+        int y = 56;
         this.addRenderableWidget(Button.builder(
             Component.literal("Enabled: " + (getEnabled() ? "ON" : "OFF")),
             btn -> {
@@ -214,21 +217,8 @@ public class DingConfigScreen extends Screen {
                 setEnabled(next);
                 btn.setMessage(Component.literal("Enabled: " + (next ? "ON" : "OFF")));
             }
-        ).bounds(leftX, y, fieldWidth, 20).build());
+        ).bounds(leftX, y, halfWidth, 20).build());
 
-        y += 38;
-        this.soundNameBox = new EditBox(this.font, leftX, y, fieldWidth, 20, Component.literal("Sound ID"));
-        this.soundNameBox.setMaxLength(256);
-        this.soundNameBox.setValue(getSoundName());
-        this.addRenderableWidget(this.soundNameBox);
-
-        y += 28;
-        this.addRenderableWidget(new DoubleSlider(leftX, y, fieldWidth, 20, "Volume", 0.0D, 2.0D, getVolume(), this::setVolume));
-
-        y += 26;
-        this.addRenderableWidget(new DoubleSlider(leftX, y, fieldWidth, 20, "Pitch", 0.0D, 2.0D, getPitch(), this::setPitch));
-
-        y += 26;
         this.addRenderableWidget(Button.builder(
             Component.literal("Category: " + EventHandlerClient.getCategoryByName(getCategory()).getName()),
             btn -> {
@@ -238,9 +228,19 @@ public class DingConfigScreen extends Screen {
                 setCategory(next.getName());
                 btn.setMessage(Component.literal("Category: " + next.getName()));
             }
-        ).bounds(leftX, y, fieldWidth, 20).build());
+        ).bounds(rightX, y, halfWidth, 20).build());
 
-        y += 28;
+        y = 94;
+        this.soundNameBox = new EditBox(this.font, leftX, y, fieldWidth, 20, Component.literal("Sound ID"));
+        this.soundNameBox.setMaxLength(256);
+        this.soundNameBox.setValue(getSoundName());
+        this.addRenderableWidget(this.soundNameBox);
+
+        y = 122;
+        this.addRenderableWidget(new DoubleSlider(leftX, y, halfWidth, 20, "Volume", 0.0D, 2.0D, getVolume(), this::setVolume));
+        this.addRenderableWidget(new DoubleSlider(rightX, y, halfWidth, 20, "Pitch", 0.0D, 2.0D, getPitch(), this::setPitch));
+
+        y = 150;
         this.addRenderableWidget(Button.builder(
             Component.literal("Test Sound"),
             btn -> {
@@ -249,7 +249,7 @@ public class DingConfigScreen extends Screen {
             }
         ).bounds(leftX, y, fieldWidth, 20).build());
 
-        int footerY = this.height - 28;
+        int footerY = Math.max(182, this.height - 28);
         this.addRenderableWidget(Button.builder(CommonComponents.GUI_CANCEL, btn -> onClose())
             .bounds(centerX - 104, footerY, 100, 20).build());
         this.addRenderableWidget(Button.builder(CommonComponents.GUI_DONE, btn -> {
@@ -261,9 +261,9 @@ public class DingConfigScreen extends Screen {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         super.render(graphics, mouseX, mouseY, partialTick);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 14, 0xFFFFFFFF);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 10, 0xFFFFFFFF);
         int leftX = this.width / 2 - 130;
-        graphics.drawString(this.font, Component.literal("Sound ID (e.g. entity.experience_orb.pickup):"), leftX, 96, 0xFFA0A0A0);
+        graphics.drawString(this.font, Component.literal("Sound ID (e.g. entity.experience_orb.pickup):"), leftX, 82, 0xFFA0A0A0);
     }
 
     @Override
