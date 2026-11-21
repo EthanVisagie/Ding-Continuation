@@ -1,50 +1,59 @@
-//If you are reading this, this is a direct copy of the Fabric subproject's build.gradle which is also used for the common and api subprojects. Large proportion of setup is done in build-conventions.gradle
 plugins {
-    id 'idea'
     id 'fabric-loom' version "${fabric_loom_version}"
-    id 'build-conventions'
-    id 'build-conventions-variations'
+}
+
+base {
+    archivesName = "${archives_base_name}-fabric"
 }
 
 dependencies {
-    // To change the versions see the gradle.properties file
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.layered() {
-        officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${project.parchment_mc_version}:${project.parchment_version}@zip")
-    }
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    //Additional dependencies defined in build-conventions plugin in buildSrc
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modCompileOnly "com.terraformersmc:modmenu:${modmenu_version}"
 }
 
-loom {
-    if (file("src/main/resources/${mod_id}.accesswidener").exists()) {
-        accessWidenerPath = file("src/main/resources/${mod_id}.accesswidener")
-    }
-    if (hasMixins) {
-        mixin {
-            defaultRefmapName = "${project.mod_id}.refmap.json"
-        }
+sourceSets {
+    main {
+        java.srcDirs += [project(':common').file('src/main/java')]
+        resources.srcDirs += [project(':common').file('src/main/resources')]
     }
 }
 
-idea {
-    module {
-        downloadSources = true
-        downloadJavadoc = true
-        inheritOutputDirs = false
-
-        if (gradle.root != null) { //we are in a composite build
-            def outDir = file("${gradle.root.getRootProject().rootDir}/out")
-            outputDir = file("${outDir}/production/${mod_id}")
-            testOutputDir = file("${outDir}/test/${mod_id}")
-        }
-    }
-}
+def replaceProperties = [
+    minecraft_version: minecraft_version,
+    mod_id           : mod_id,
+    mod_name         : mod_name,
+    mod_version      : mod_version,
+    mod_description  : mod_description,
+    mod_license      : mod_license,
+    mod_url_home     : mod_url_home,
+    mod_url_sources  : mod_url_sources,
+    mod_url_issues   : mod_url_issues
+]
 
 tasks.named('processResources', ProcessResources).configure {
-    filesMatching(['fabric.mod.json']) {
-        expand replaceProperties + [project: project]
+    from(rootProject.file('COPYING'))
+    from(rootProject.file('COPYING.LESSER'))
+    inputs.properties replaceProperties
+    filesMatching(['fabric.mod.json', 'pack.mcmeta']) {
+        expand replaceProperties
+    }
+}
+
+tasks.named('compileJava') {
+    dependsOn ':common:compileJava'
+}
+
+tasks.named('jar') {
+    manifest {
+        attributes([
+            'Specification-Title'     : mod_id,
+            'Specification-Vendor'    : 'iChun, Ding Continuation',
+            'Specification-Version'   : mod_version,
+            'Implementation-Title'    : 'Ding Continuation (Fabric)',
+            'Implementation-Version'  : mod_version,
+            'Implementation-Vendor'   : 'Ding Continuation'
+        ])
     }
 }
