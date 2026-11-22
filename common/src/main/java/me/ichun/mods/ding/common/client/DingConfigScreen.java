@@ -3,7 +3,7 @@ package me.ichun.mods.ding.common.client;
 import me.ichun.mods.ding.common.Ding;
 import me.ichun.mods.ding.common.core.Config;
 import me.ichun.mods.ding.common.core.EventHandlerClient;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -259,11 +259,11 @@ public class DingConfigScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        super.render(graphics, mouseX, mouseY, partialTick);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 10, 0xFFFFFFFF);
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        graphics.centeredText(this.font, this.title, this.width / 2, 10, 0xFFFFFFFF);
         int leftX = this.width / 2 - 130;
-        graphics.drawString(this.font, Component.literal("Sound ID (e.g. entity.experience_orb.pickup):"), leftX, 82, 0xFFA0A0A0);
+        graphics.text(this.font, Component.literal("Sound ID (e.g. entity.experience_orb.pickup):"), leftX, 82, 0xFFA0A0A0);
     }
 
     @Override

@@ -24,6 +24,9 @@ You can configure Ding Continuation in two ways:
 ## Supported Versions
 
 1. Minecraft 1.21.11 (Fabric and NeoForge)
+2. Minecraft 26.1.x / 26.1.2 (Fabric and NeoForge)
+3. Minecraft 26.2 (Fabric and NeoForge)
+4. Minecraft 26.3 (Fabric and NeoForge)
 
 ## License & Credits
 
