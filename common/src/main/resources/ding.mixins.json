@@ -4,6 +4,7 @@
   "package": "me.ichun.mods.ding.common.mixin",
   "compatibilityLevel": "JAVA_25",
   "client": [
+    "GuiMixin",
     "MinecraftMixin",
     "ClientPacketListenerMixin"
   ],
